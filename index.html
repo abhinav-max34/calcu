@@ -1,40 +1,51 @@
-const API_TOKEN = "YOUR_API_TOKEN_HERE";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Calculator</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="calculator">
+    <input type="text" class="display" id="display" disabled />
 
-function level(aqi){
-  if(aqi<=50) return ["Good","good"];
-  if(aqi<=100) return ["Moderate","moderate"];
-  if(aqi<=200) return ["Poor","poor"];
-  if(aqi<=300) return ["Bad","bad"];
-  return ["Severe","severe"];
-}
+    <div class="buttons">
+        <button onclick="clearDisplay()" class="btn clear">C</button>
+        <button onclick="appendOperator('(')" class="btn">(</button>
+        <button onclick="appendOperator(')')" class="btn">)</button>
+        <button onclick="deleteLast()" class="btn">DEL</button>
 
-async function fetchCityAQI(){
-  const city = document.getElementById("cityInput").value;
-  const r = await fetch(`https://api.waqi.info/feed/${city}/?token=${API_TOKEN}`);
-  const d = await r.json();
-  if(d.status!=="ok") return;
-  const aqi = d.data.aqi;
-  const [t,c] = level(aqi);
-  document.getElementById("cityResult").innerHTML =
-    `<div class="aqiBox ${c}">${city}<br>AQI:${aqi}<br>${t}</div>`;
-  saveHistory(city, aqi);
-}
+        <button onclick="appendNumber('7')" class="btn">7</button>
+        <button onclick="appendNumber('8')" class="btn">8</button>
+        <button onclick="appendNumber('9')" class="btn">9</button>
+        <button onclick="appendOperator('/')" class="btn operator">/</button>
 
-async function loadVillageAQI(){
-  const box = document.getElementById("villageAQI");
-  for(let v of villages){
-    const r = await fetch(`https://api.waqi.info/feed/geo:${v.lat};${v.lon}/?token=${API_TOKEN}`);
-    const d = await r.json();
-    if(d.status!=="ok") continue;
-    const aqi = d.data.aqi;
-    const [t,c] = level(aqi);
-    box.innerHTML += `<div class="aqiBox ${c}">${v.name}<br>AQI:${aqi}<br>${t}</div>`;
-    saveHistory(v.name, aqi);
-  }
-}
+        <button onclick="appendNumber('4')" class="btn">4</button>
+        <button onclick="appendNumber('5')" class="btn">5</button>
+        <button onclick="appendNumber('6')" class="btn">6</button>
+        <button onclick="appendOperator('*')" class="btn operator">*</button>
 
-window.onload = ()=>{
-  loadVillageAQI();
-  loadHistory();
-  analyze();
-};
+        <button onclick="appendNumber('1')" class="btn">1</button>
+        <button onclick="appendNumber('2')" class="btn">2</button>
+        <button onclick="appendNumber('3')" class="btn">3</button>
+        <button onclick="appendOperator('-')" class="btn operator">-</button>
+
+        <button onclick="appendNumber('0')" class="btn zero">0</button>
+        <button onclick="appendNumber('.')" class="btn">.</button>
+        <button onclick="calculate()" class="btn equals">=</button>
+        <button onclick="appendOperator('+')" class="btn operator">+</button>
+
+        <!-- Scientific buttons -->
+        <button onclick="appendFunction('Math.sin(')" class="btn sci">sin</button>
+        <button onclick="appendFunction('Math.cos(')" class="btn sci">cos</button>
+        <button onclick="appendFunction('Math.tan(')" class="btn sci">tan</button>
+        <button onclick="appendFunction('Math.log(')" class="btn sci">log</button>
+        <button onclick="appendFunction('Math.sqrt(')" class="btn sci">√</button>
+        <button onclick="appendFunction('Math.pow(')" class="btn sci">^</button>
+        <button onclick="appendOperator('%')" class="btn sci">%</button>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
